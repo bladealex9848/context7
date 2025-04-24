@@ -1,18 +1,21 @@
 #!/usr/bin/env node
 
-import { spawn } from 'child_process';
+import { exec } from 'child_process';
 import readline from 'readline';
 import { env as processEnv } from 'process';
+
+// Detectar sistema operativo
+const isWindows = process.platform === 'win32';
 
 // Función para probar un MCP
 async function testMCP(name, command, args, env = {}) {
   console.log(`\n\n===== Probando MCP: ${name} =====`);
-  console.log(`Comando: ${command} ${args.join(' ')}`);
+  const fullCommand = `${command} ${args.join(' ')}`;
+  console.log(`Comando: ${fullCommand}`);
 
   return new Promise((resolve) => {
-    const childProcess = spawn(command, args, {
-      env: { ...processEnv, ...env },
-      stdio: ['pipe', 'pipe', 'pipe']
+    const childProcess = exec(fullCommand, {
+      env: { ...processEnv, ...env }
     });
 
     // Configurar timeout para terminar el proceso después de 10 segundos
@@ -46,6 +49,10 @@ async function testMCP(name, command, args, env = {}) {
         console.log(`\n❌ ${name} falló con código de salida ${code}`);
         clearTimeout(timeout);
         resolve(false);
+      } else {
+        console.log(`\n✅ ${name} se cerró correctamente`);
+        clearTimeout(timeout);
+        resolve(true);
       }
     });
 
@@ -66,22 +73,22 @@ async function main() {
   const mcps = [
     {
       name: 'Context7',
-      command: 'npx',
+      command: isWindows ? 'npx.cmd' : 'npx',
       args: ['-y', '@upstash/context7-mcp@latest']
     },
     {
       name: 'Puppeteer',
-      command: 'npx',
+      command: isWindows ? 'npx.cmd' : 'npx',
       args: ['-y', '@modelcontextprotocol/server-puppeteer']
     },
     {
       name: 'Sequential Thinking',
-      command: 'npx',
+      command: isWindows ? 'npx.cmd' : 'npx',
       args: ['-y', '@modelcontextprotocol/server-sequential-thinking']
     },
     {
       name: 'GitHub',
-      command: 'npx',
+      command: isWindows ? 'npx.cmd' : 'npx',
       args: ['-y', '@modelcontextprotocol/server-github'],
       env: {
         GITHUB_PERSONAL_ACCESS_TOKEN: process.env.GITHUB_TOKEN || 'YOUR_GITHUB_TOKEN_HERE'

@@ -1,18 +1,25 @@
 {
     "terminal.integrated.fontFamily": "FiraCode Nerd Font",
     "terminal.integrated.fontSize": 12,
-    "terminal.integrated.defaultProfile.osx": "zsh",
-    "terminal.integrated.profiles.osx": {
-        "zsh": {
-            "path": "/bin/zsh",
-            "args": ["-l"]
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
         },
-        "pwsh": {
-            "path": "/usr/local/microsoft/powershell/7/pwsh",
-            "args": ["-l"]
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
         }
     },
-    "terminal.integrated.env.osx": {
+    "terminal.integrated.env.windows": {
         "TERM_PROGRAM": "vscode"
     },
     "terminal.integrated.gpuAcceleration": "on",
